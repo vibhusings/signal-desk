@@ -28,8 +28,12 @@ import { recordApproval,deliveryRouteFor,approvedDraftFor } from '../send/approv
 import { sendReferral } from '../send/referral.js';
 
 const dir=resolve('.runtime/bridge');mkdirSync(dir,{recursive:true});
-const config=JSON.parse(readFileSync(resolve('.runtime/bridge-config.json'),'utf8')) as {url:string;siteToken:string;runnerKey:string};
-if(!config.url.startsWith('https://')||!config.siteToken||!config.runnerKey)throw Error('Invalid bridge configuration');
+// Written by `node scripts/setup-secrets.mjs` (see SETUP.md). siteToken is only needed
+// when the site sits behind an extra platform login; Cloudflare installs omit it.
+const configPath=resolve('.runtime/bridge-config.json');
+if(!existsSync(configPath))throw Error(`Missing ${configPath}. Run "node scripts/setup-secrets.mjs --url https://<your-site>" and copy the file here (see SETUP.md).`);
+const config=JSON.parse(readFileSync(configPath,'utf8')) as {url:string;siteToken?:string;runnerKey:string};
+if(typeof config.url!=='string'||!config.url.startsWith('https://')||typeof config.runnerKey!=='string'||config.runnerKey.length<32)throw Error('Invalid .runtime/bridge-config.json: needs an https url and a runnerKey of at least 32 characters');
 const path=resolve(dir,'state.json');
 type State={records:Array<{id:string;email:string;company:string;enabled:boolean;mode?:string}>;completions:Record<string,{status:string;result:any}>;started:string[];signalCompletion?:{id:string;result:any};crmCompletion?:{id:string;result:any}};
 const state:State=existsSync(path)?JSON.parse(readFileSync(path,'utf8')):{records:[],completions:{},started:[]};
@@ -71,7 +75,7 @@ const investmentBase={...policyBase,mode:'Investment outreach',resumeAttached:fa
 const investmentPolicy={...investmentBase,hash:createHash('sha256').update(JSON.stringify(investmentBase)).digest('hex')};
 function guardSnapshot(){return {killSwitch:readKillSwitch(),reputation:reputationSnapshot()};}
 let snapshot:any={policy,investmentPolicy,resume:{configured:!!resumeFileId,filename:resumeFilename,error:null},credentialKey:{algorithm:'RSA-OAEP-256',keyId:credentialKeyId,publicKey:credentialPublicKey},credential:{configured:false},slashy:{connected:false,error:null},capabilities:{autoDraft:true,crm:true,crmAttio:!!process.env.CRM_ATTIO_API_KEY&&!!process.env.CRM_ATTIO_OBJECT&&process.env.CRM_ATTIO_INBOX===policy.sender,attioMeetings:!!process.env.ATTIO_API_KEY||!!process.env.CRM_ATTIO_API_KEY,signals:true,investment:true,sending:sendingEnabled,byok:true,claude:!byokRequired,slashy:!byokRequired},records:[],recordsUpdatedAt:null,scheduler:{running:false,lastError:null},...guardSnapshot()};
-async function api(body:any){const r=await fetch(new URL('/api/runner',config.url),{method:'POST',redirect:'error',headers:{'Content-Type':'application/json','OAI-Sites-Authorization':`Bearer ${config.siteToken}`,'x-outreach-runner-key':config.runnerKey},body:JSON.stringify(body),signal:AbortSignal.timeout(30000)});if(!r.ok)throw Error(`Signal Desk connection failed (${r.status})`);return r.json();}
+async function api(body:any){const r=await fetch(new URL('/api/runner',config.url),{method:'POST',redirect:'error',headers:{'Content-Type':'application/json',...(config.siteToken?{'OAI-Sites-Authorization':`Bearer ${config.siteToken}`}:{}),'x-outreach-runner-key':config.runnerKey},body:JSON.stringify(body),signal:AbortSignal.timeout(30000)});if(!r.ok)throw Error(`Signal Desk connection failed (${r.status})`);return r.json();}
 async function refreshCredential(){
  const response=await api({op:'credentialGet'}),credential=response.credential;
  claudeMode=response.claudeMode==='subscription'?'subscription':'api';
