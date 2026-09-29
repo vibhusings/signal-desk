@@ -1,3 +1,4 @@
+# Template: scripts/install-systemd.sh fills in __USER__, __GROUP__, __HOME__, __REPO__ and __NODE__.
 [Unit]
 Description=Signal Desk cloud runner
 After=network-online.target
@@ -5,13 +6,13 @@ Wants=network-online.target
 
 [Service]
 Type=simple
-User=vibhusingh
-Group=vibhusingh
-WorkingDirectory=/home/vibhusingh/gtm-workflow
+User=__USER__
+Group=__GROUP__
+WorkingDirectory=__REPO__
 EnvironmentFile=/etc/signal-desk/runner.env
-Environment=HOME=/home/vibhusingh
-Environment=PATH=/usr/local/bin:/usr/bin:/bin:/home/vibhusingh/.local/bin
-ExecStart=/usr/bin/node --import tsx src/bridge/runner.ts
+Environment=HOME=__HOME__
+Environment=PATH=/usr/local/bin:/usr/bin:/bin:__HOME__/.local/bin
+ExecStart=__NODE__ --import tsx src/bridge/runner.ts
 Restart=always
 RestartSec=10
 TimeoutStopSec=30
@@ -21,7 +22,7 @@ NoNewPrivileges=true
 PrivateTmp=true
 ProtectSystem=full
 ProtectHome=read-only
-ReadWritePaths=/home/vibhusingh/gtm-workflow/.runtime /home/vibhusingh/.claude
+ReadWritePaths=__REPO__/.runtime __HOME__/.claude
 
 [Install]
 WantedBy=multi-user.target
