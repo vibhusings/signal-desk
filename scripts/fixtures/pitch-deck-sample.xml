@@ -1,0 +1,28 @@
+<pdf2xml>
+<page number="1" position="absolute" top="0" left="0" height="1188" width="918">
+<text top="45" left="595" width="222" height="23" font="0">University Pitch Day 2026</text>
+<text top="60" left="61" width="134" height="12" font="1"><a href="https://www.linkedin.com/company/plug-and-play">PNP University Pitch Sessions</a></text>
+<text top="102" left="26" width="6" height="12" font="3">#</text>
+<text top="102" left="67" width="33" height="12" font="3">Startup</text>
+<text top="102" left="361" width="66" height="12" font="3">Brief Summary</text>
+<text top="102" left="673" width="30" height="12" font="3">Raised</text>
+<text top="102" left="747" width="35" height="12" font="3">Country</text>
+<text top="102" left="830" width="44" height="12" font="3">University</text>
+<text top="119" left="27" width="5" height="10" font="4">1</text>
+<text top="119" left="42" width="84" height="10" font="5"><a href="https://example.com">Alpha Corp</a></text>
+<text top="119" left="135" width="404" height="10" font="6">A single line summary for Alpha.</text>
+<text top="119" left="673" width="30" height="10" font="4">$1M</text>
+<text top="119" left="756" width="17" height="10" font="4">USA</text>
+<text top="119" left="842" width="19" height="10" font="4">CMU</text>
+<text top="140" left="27" width="5" height="10" font="4">2</text>
+<text top="140" left="63" width="43" height="10" font="5"><a href="https://beta.example.com">Beta Inc</a></text>
+<text top="135" left="135" width="498" height="10" font="6">First line of Beta's wrapped summary, which</text>
+<text top="146" left="135" width="500" height="10" font="6">continues onto a second line below.</text>
+<text top="140" left="673" width="30" height="10" font="4">$2M</text>
+<text top="140" left="756" width="17" height="10" font="4">Canada</text>
+<text top="140" left="842" width="19" height="10" font="4">Pitt</text>
+</page>
+<page number="2" position="absolute" top="0" left="0" height="1188" width="918">
+<text top="45" left="61" width="300" height="20" font="0">Sponsor content that must not leak into row 2</text>
+</page>
+</pdf2xml>

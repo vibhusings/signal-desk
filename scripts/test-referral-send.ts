@@ -1,0 +1,40 @@
+import assert from 'node:assert/strict';
+import { mkdtempSync } from 'node:fs';
+import { tmpdir } from 'node:os';
+import { join } from 'node:path';
+process.env.SEND_GUARD_DIR = mkdtempSync(join(tmpdir(), 'referral-send-'));
+const { sendReferral } = await import('../src/send/referral.js');
+const { haltSending, resumeSending } = await import('../src/send/kill-switch.js');
+
+const calls: Array<[string, any]> = [];
+const fake = (to = 'maya@north.fund') => async (name: string, args: any) => {
+  calls.push([name, args]);
+  if (name === 'draft_email') return { draft_id: 'draft_1', to: [{ email: to }] };
+  if (name === 'send_email') return { delivery_status: 'queued' };
+  throw new Error('unexpected ' + name);
+};
+const payload = { to: 'Maya@North.fund', toName: 'Maya Chen', subject: 'Northwind Series A', body: 'Hi Maya,\n\nNorthwind is raising a Series A. I invest at Seed, so this round is outside my range.\n\nVibhu Singh' };
+const sent = await sendReferral(fake(), 'sender@example.com', payload);
+assert.equal(sent.ok, true);
+if (sent.ok) assert.equal(sent.to, 'maya@north.fund');
+assert.equal(calls[0][0], 'draft_email');
+assert.deepEqual(calls[0][1].to, ['maya@north.fund']);
+assert.equal(calls[0][1].subject, 'Northwind Series A');
+assert.equal(calls[1][0], 'send_email');
+calls.length = 0;
+const testSend = await sendReferral(fake('owner@example.com'), 'sender@example.com', { ...payload, deliverTo: 'Owner@Example.com' });
+assert.equal(testSend.ok, true);
+if (testSend.ok) { assert.equal(testSend.to, 'owner@example.com'); assert.equal(testSend.testDelivery, true); }
+assert.equal(calls[0][1].to[0], 'owner@example.com');
+assert.match(calls[0][1].subject, /\(test: Maya\)$/);
+calls.length = 0;
+const mismatch = await sendReferral(fake('someone@else.com'), 'sender@example.com', payload);
+assert.equal(mismatch.ok, false);
+assert.ok(!calls.some(([name]) => name === 'send_email'));
+haltSending('test', 'manual');
+calls.length = 0;
+const halted = await sendReferral(fake(), 'sender@example.com', payload);
+assert.equal(halted.ok, false);
+assert.equal(calls.length, 0);
+resumeSending();
+console.log('Referral send: one email, test delivery replaces the VC, mismatch and kill switch do not send.');

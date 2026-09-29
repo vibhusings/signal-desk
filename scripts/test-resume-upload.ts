@@ -1,0 +1,13 @@
+import assert from 'node:assert/strict';
+import { uploadResume } from '../src/bridge/resume.js';
+const calls:Array<[string,any]>=[];
+const call:any=async(name:string,args:any)=>{calls.push([name,args]);return name==='request_file_upload'?{success:true,file_id:'file_resume_1',upload_url:'https://upload.example/resume'}:{success:true,status:'uploaded'};};
+let put:any;
+const fetcher:any=async(url:string,init:any)=>{put={url,init};return new Response('',{status:200});};
+const id=await uploadResume(call,{filename:'resume.pdf',mimeType:'application/pdf',bytes:Buffer.from('%PDF-test')},fetcher);
+assert.equal(id,'file_resume_1');
+assert.deepEqual(calls.map(([name])=>name),['request_file_upload','check_upload_status']);
+assert.equal(calls[0][1].size_bytes,9);
+assert.equal(put.url,'https://upload.example/resume');assert.equal(put.init.method,'PUT');assert.ok(put.init.body instanceof FormData);
+await assert.rejects(()=>uploadResume(async()=>({file_id:'x',upload_url:'http://unsafe.example'}),{filename:'resume.pdf',mimeType:'application/pdf',bytes:Buffer.from('x')},fetcher),/valid resume upload URL/);
+console.log('Resume upload: reserves a Slashy file, uploads bytes, and verifies status.');

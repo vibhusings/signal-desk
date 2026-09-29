@@ -1,0 +1,10 @@
+import assert from 'node:assert/strict';
+import { searchCrustdata } from '../src/signals/crustdata.js';
+const criteria={thesis:'AI tools',sectors:'Software',keywords:'agents',stages:'Seed',geographies:'USA',exclusions:'crypto',kinds:['Product'],watchlist:[],sources:[],intervalHours:24,enabled:false};
+let calls=0;
+const mock:any=async(url:string,o:any)=>{calls++;assert.equal(url,'https://api.crustdata.com/company/search');assert.equal(o.redirect,'error');assert.equal(o.headers.Authorization,'Bearer private-key');assert.equal(o.headers['x-api-version'],'2025-11-01');const b=JSON.parse(o.body);assert.equal(b.limit,10);assert.equal(b.cursor,undefined);assert.ok(b.search.query.includes('Exclude: crypto'));return new Response(JSON.stringify({companies:[{basic_info:{name:'Acme',primary_domain:'acme.example',description:'Untrusted provider content'},locations:{country:'USA'},headcount:{total:12}},{basic_info:{name:'Duplicate',primary_domain:'acme.example'}},{basic_info:{name:'Private',primary_domain:'127.0.0.1'}},{basic_info:{name:'Injected URL',primary_domain:'https://evil.example/path'}}],next_cursor:'do-not-follow'}));};
+const good=await searchCrustdata('private-key',criteria,mock);assert.equal(calls,1);assert.equal(good.candidates.length,1);assert.equal(good.discovery.status,'succeeded');assert.ok(!JSON.stringify(good).includes('private-key'));
+for(const code of [401,402,403,429,500]){let attempts=0;const r=await searchCrustdata('private-key',criteria,async()=>{attempts++;return new Response('secret provider diagnostic',{status:code});});assert.equal(attempts,1);assert.equal(r.discovery.status,'failed');assert.ok(!JSON.stringify(r).includes('secret'));}
+assert.equal((await searchCrustdata('key',criteria,async()=>new Response('{}'))).discovery.status,'failed');
+assert.equal((await searchCrustdata('key',criteria,async()=>{throw Error('private-key');})).discovery.status,'failed');
+console.log('Crustdata request contract, bounded credits, candidate validation, no pagination/retry, and safe errors passed.');
