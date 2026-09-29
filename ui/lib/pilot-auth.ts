@@ -6,7 +6,15 @@ const MAX_AGE_SECONDS = 60 * 60 * 24 * 14;
 const pilotEnv = env as unknown as {
   PILOT_ACCESS_CODE_SHA256?: string;
   PILOT_SESSION_SECRET?: string;
+  TRUST_PLATFORM_IDENTITY?: string;
 };
+
+// Identity headers are only trustworthy behind a hosting platform that sets them and
+// strips client copies. On a plain Worker anyone can send them, so they are ignored
+// unless explicitly enabled; an unconfigured site then admits nobody.
+export function platformIdentityTrusted() {
+  return pilotEnv.TRUST_PLATFORM_IDENTITY === '1';
+}
 
 function bytesToHex(bytes: ArrayBuffer) {
   return [...new Uint8Array(bytes)].map(byte => byte.toString(16).padStart(2, '0')).join('');
@@ -60,6 +68,7 @@ export function pilotModeConfigured() {
 
 export async function workspaceOwner(request: Request) {
   if (pilotModeConfigured()) return await pilotSessionValid(request) ? PILOT_OWNER_ID : null;
+  if (!platformIdentityTrusted()) return null;
   const platformOwner = request.headers.get('oai-authenticated-user-id');
   if (platformOwner) return platformOwner;
   return null;

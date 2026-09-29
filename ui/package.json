@@ -6,7 +6,7 @@
     "node": ">=22.13.0"
   },
   "scripts": {
-    "test:signals": "node scripts/test-signals.mjs && node scripts/test-pipeline.mjs && node scripts/test-outreach-links.mjs && node scripts/test-credentials.mjs && node scripts/test-slashy.mjs",
+    "test:signals": "node scripts/test-signals.mjs && node scripts/test-pilot-auth.mjs && node scripts/test-pipeline.mjs && node scripts/test-outreach-links.mjs && node scripts/test-credentials.mjs && node scripts/test-slashy.mjs",
     "install:ci": "node scripts/install-ci.mjs",
     "dev": "node scripts/run-framework.mjs dev",
     "build": "node scripts/run-framework.mjs build",
