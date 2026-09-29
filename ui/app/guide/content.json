@@ -1,0 +1,730 @@
+{
+  "title": "Signal Desk product handbook",
+  "date": "September 27, 2026",
+  "sections": [
+    {
+      "id": "overview",
+      "title": "Product overview",
+      "lead": "Signal Desk helps an investment team discover companies, start reviewed outreach, and turn conversations into a source-backed CRM.",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "This handbook explains the current pilot, the decisions each user controls, and the steps needed to operate it. It covers startup signals, contact research, email follow-ups, scheduling, inbox CRM, meeting imports, Attio synchronization and job-application tracking. The website and cloud worker can run while the user’s laptop is asleep."
+        },
+        {
+          "type": "h",
+          "text": "The problem and intended outcome"
+        },
+        {
+          "type": "p",
+          "text": "Research, email conversations and relationship notes are often spread across tools. Signal Desk brings those activities into one workspace so a user can move from an evidence-backed opportunity to a reviewed campaign, then retain the context of subsequent conversations. It supports investment professionals and operators; its Applications view also supports tracking VC job applications."
+        },
+        {
+          "type": "table",
+          "headers": [
+            "Capability",
+            "Current scope"
+          ],
+          "rows": [
+            [
+              "Discovery",
+              "Scheduled research with sources, scores and optional Crustdata candidates."
+            ],
+            [
+              "Outreach",
+              "Contact discovery, approved launch, follow-ups and conditional calendar booking."
+            ],
+            [
+              "Relationship CRM",
+              "Inbox and note extraction; contacts, VC friends, funds, deals and weekly activity."
+            ],
+            [
+              "Applications",
+              "Email-based job-application status tracking, including Tsenta confirmations."
+            ],
+            [
+              "Attio",
+              "Administrator-configured CRM export; meeting import requires delivery setup."
+            ]
+          ]
+        },
+        {
+          "type": "h",
+          "text": "Pilot boundary"
+        },
+        {
+          "type": "p",
+          "text": "This is one shared workspace with one configured inbox and sender. An access code does not create a separate private account. Administrators must deliberately configure the inbox, calendar and CRM destination for the intended users. Airtable mirroring, independent customer accounts and direct Tsenta synchronization are not implemented."
+        },
+        {
+          "type": "p",
+          "text": "Feature descriptions reflect the implementation reviewed on September 27, 2026. Connection badges and test results are not guarantees that every external account is ready; verify a real operation with the connected account."
+        }
+      ]
+    },
+    {
+      "id": "workspace",
+      "title": "Workspace navigation",
+      "lead": "Use the tab that matches the action you want to take. Research, drafts and live campaigns have different purposes.",
+      "blocks": [
+        {
+          "type": "table",
+          "headers": [
+            "Tab",
+            "Primary task"
+          ],
+          "rows": [
+            [
+              "Signals",
+              "Set investment criteria, run scans, inspect evidence and shortlist companies."
+            ],
+            [
+              "Launch outreach",
+              "Research contacts, select recipients, review launch and monitor live campaigns."
+            ],
+            [
+              "CRM",
+              "Read imported conversations, relationships, funds, deals, applications and sync activity."
+            ],
+            [
+              "Companies",
+              "Keep company research, source links, notes and drafts."
+            ],
+            [
+              "Pipeline",
+              "Move saved company research between New, Shortlisted, Draft ready and Passed."
+            ],
+            [
+              "Outreach",
+              "Browse saved draft text; this is not the live email campaign monitor."
+            ],
+            [
+              "Settings",
+              "Connect Claude and Slashy, add optional Crustdata, inspect integration status."
+            ]
+          ]
+        },
+        {
+          "type": "h",
+          "text": "Start with the right workspace"
+        },
+        {
+          "type": "p",
+          "text": "Companies, Pipeline and Outreach may show fictional examples. Select Open my workspace before saving real company research. Explore demo returns to example data. Signals and CRM maintain their own live records; do not treat those views as a sandbox."
+        },
+        {
+          "type": "h",
+          "text": "Three common journeys"
+        },
+        {
+          "type": "steps",
+          "items": [
+            "Discover a company: Signals → Investment criteria → Scan now → inspect evidence → Shortlist.",
+            "Contact a founder: open the signal → Review company & find founders → Find founders for investment outreach → review recipients → launch.",
+            "Capture an existing relationship: CRM → Capture & settings → save inbox settings → Check inbox → review Contacts and Weekly."
+          ]
+        },
+        {
+          "type": "h",
+          "text": "Research stage and deal status"
+        },
+        {
+          "type": "p",
+          "text": "Shortlisting records a research decision without closing a deal or sending an email. Draft ready records saved message text. Deal status comes from an imported conversation or note and retains its supporting excerpt."
+        },
+        {
+          "type": "p",
+          "text": "Export in the company workspace downloads company research as JSON. It is not a complete export of mailbox messages, CRM records or campaign state."
+        }
+      ]
+    },
+    {
+      "id": "architecture",
+      "title": "How the system works",
+      "lead": "The UI collects settings and actions. A cloud worker performs the research, email and CRM jobs using the configured integrations.",
+      "blocks": [
+        {
+          "type": "figure",
+          "name": "architecture",
+          "caption": "System diagram showing the role of each integration. Arrows show workflow relationships, not a complete network topology."
+        },
+        {
+          "type": "h",
+          "text": "Each integration has a different job"
+        },
+        {
+          "type": "bullets",
+          "items": [
+            "Claude investigates companies, writes email copy and extracts structured facts. Settings shows the active Claude mode. API mode uses the supplied Anthropic key. Administrator-enabled subscription testing uses the worker’s Claude Code login and its usage allowance; it does not use the visitor’s subscription.",
+            "Slashy provides the connected research, inbox and calendar tools. Connecting the intended Google inbox is essential.",
+            "Crustdata optionally supplies company candidates. Claude still investigates their public sources.",
+            "Attio stores outreach state and receives CRM exports. These are separately configured uses of Attio."
+          ]
+        },
+        {
+          "type": "h",
+          "text": "Where information lives"
+        },
+        {
+          "type": "p",
+          "text": "Signal Desk stores saved research, CRM sources, extracted facts and job activity in its cloud database. The original messages remain in the connected mailbox. CRM sync copies records into the configured Attio destination; it is not the step that initially saves them."
+        },
+        {
+          "type": "p",
+          "text": "The website is hosted on Cloudflare and the background worker runs on Google Cloud. The worker must remain available for scheduled work, but the user’s Mac and browser do not have to stay open."
+        }
+      ]
+    },
+    {
+      "id": "onboarding",
+      "title": "Setup and first use",
+      "lead": "The administrator prepares the workspace. The user then connects credentials and verifies one small operation before relying on recurring jobs.",
+      "blocks": [
+        {
+          "type": "h",
+          "text": "Administrator preparation"
+        },
+        {
+          "type": "bullets",
+          "items": [
+            "Confirm the intended sender name, inbox, calendar, meeting policy and outreach sequence. Keep only the intended cloud worker active.",
+            "Configure the Attio outreach store and the separate investment CRM token, object, fields and inbox binding. There is no Connect Attio account button in the UI.",
+            "Configure a resume if job-application outreach should attach one. Investment outreach omits the resume.",
+            "Share the app URL and access code privately. Check the effective send policy before any real campaign."
+          ]
+        },
+        {
+          "type": "h",
+          "text": "User setup"
+        },
+        {
+          "type": "steps",
+          "items": [
+            "Open Signal Desk and enter the supplied access code. It is separate from the Google account password.",
+            "Open Settings, paste an Anthropic API key and choose Encrypt for runner. Wait for the worker to load it. A completed research job validates actual API access.",
+            "Under Slashy email & calendar, choose Connect Slashy. Authorize the Google account matching the configured inbox, return to Signal Desk and check the connection.",
+            "Open Signals → Investment criteria. Save a focused thesis and preferences, then run Scan now. Read Collection activity as well as the results.",
+            "Open CRM → Capture & settings. Confirm the inbox, choose a lookback such as 7 days, and Save settings. Click Check inbox and wait for extraction jobs.",
+            "Enable only the recurring schedules you need. Configure Attio meeting delivery separately if automatic transcript imports are wanted."
+          ]
+        },
+        {
+          "type": "h",
+          "text": "Optional Crustdata setup"
+        },
+        {
+          "type": "p",
+          "text": "In Settings → Crustdata API key, paste the key and click Encrypt for runner. Key loaded confirms that the worker decrypted it; the next scan checks provider access. Each manual or scheduled scan automatically uses the connected key. There is no per-scan selector. Remove the key to stop using Crustdata credits."
+        },
+        {
+          "type": "p",
+          "text": "Use credential fields for secrets. Never paste API keys, access codes or meeting-delivery tokens into company notes, CRM notes or support reports."
+        }
+      ]
+    },
+    {
+      "id": "signals",
+      "title": "Discovering and scoring signals",
+      "lead": "A scan is a bounded investigation of public sources, not an exhaustive crawl or a guarantee that every matching startup will be found.",
+      "blocks": [
+        {
+          "type": "steps",
+          "items": [
+            "In Investment criteria, enter the thesis, sectors, stages, geographies, keywords and exclusions. Select Hiring, Product, Partnership or Fundraising signals.",
+            "Optionally add up to 20 watchlist companies and 12 public HTTPS source URLs. Save, then Scan now.",
+            "Review quotations, source links, date caveats and Collection activity. Shortlist or pass each result.",
+            "After a successful or partial run, choose a recurring interval of 6, 12, 24 or 48 hours, or weekly; enable recurring scans and save."
+          ]
+        },
+        {
+          "type": "p",
+          "text": "Claude uses web searches and fetched company pages through Slashy. Optional Crustdata adds up to 10 candidate companies from one company-search request per scan; provider credits apply. A Crustdata failure is reported and web research can continue. This integration does not continuously watch Crustdata changes."
+        },
+        {
+          "type": "table",
+          "headers": [
+            "Score",
+            "Implementation rule"
+          ],
+          "rows": [
+            [
+              "Fit",
+              "Percentage of configured sector and keyword terms matched in extracted context; 50 if none are configured."
+            ],
+            [
+              "Recency",
+              "Declines over 90 days; zero if the event date cannot be verified."
+            ],
+            [
+              "Strength",
+              "75 with evidence on the company’s website; otherwise 50."
+            ],
+            [
+              "Confidence",
+              "50 base, plus 20 for company-site evidence and 20 for multiple evidence domains; capped at 95."
+            ]
+          ]
+        },
+        {
+          "type": "p",
+          "text": "The displayed overall score is the rounded average of these components. These are prioritization heuristics, not a probability of investment success. Stage and geography require review. Multiple domains can repeat the same original story."
+        },
+        {
+          "type": "h",
+          "text": "Evidence and coverage limits"
+        },
+        {
+          "type": "p",
+          "text": "The collector checks quoted excerpts against fetched pages, verifies that the official company domain was visited, and checks exclusions and duplicates. An event date is accepted only when the exact date occurs in supporting text. First seen records observation time. A hiring post alone does not establish a measured growth trend."
+        },
+        {
+          "type": "p",
+          "text": "A scan targets at most 8 searches, 16 page fetches, 24 tool turns and about 8 minutes, with up to 10 accepted events. Failed or partial coverage does not prove that no suitable companies exist."
+        }
+      ]
+    },
+    {
+      "id": "outreach",
+      "title": "Launching campaigns and follow ups",
+      "lead": "Signal Desk requires a reviewed campaign launch before a discovered contact becomes a recipient.",
+      "blocks": [
+        {
+          "type": "figure",
+          "name": "outreach",
+          "caption": "The outreach path includes a recipient review before launch. Saving research or shortlisting does not send email."
+        },
+        {
+          "type": "steps",
+          "items": [
+            "For investment outreach, use a signal’s Review company & find founders path. This carries the signal and thesis into founder or CEO research.",
+            "Review contact identity, role, address and evidence in Launch outreach. Select only intended recipients.",
+            "Choose Review & launch. Check sender, purpose, recipients, email directions, attachment setting and follow-up policy.",
+            "Confirm recipients & start sending when ready. Guessed addresses can require Approve first email. Monitor the campaign list afterward."
+          ]
+        },
+        {
+          "type": "p",
+          "text": "The ordinary company-name contact search targets hiring-related contacts. Use the signal-linked path for investment outreach. Job outreach requires the configured resume; investment emails do not attach one. Normal delivery goes to selected recipients unless an administrator has explicitly configured test redirection."
+        },
+        {
+          "type": "h",
+          "text": "Follow up and control"
+        },
+        {
+          "type": "p",
+          "text": "The configured investment sequence supports up to four total touches, with gaps of 3, 4 and 7 days. The actual policy displayed at launch is authoritative. Detected replies, unsubscribes, bounces, bookings and sequence completion stop ordinary follow-ups. Reply checks are periodic, so a reply may race with an email already in flight."
+        },
+        {
+          "type": "p",
+          "text": "Pause stops a campaign’s future scheduled outreach. Halt sending queues a global stop; an in-flight action may finish. Resume sending does not override server safe mode. An uncertain send outcome is held for review rather than blindly retried."
+        },
+        {
+          "type": "p",
+          "text": "The launch confirmation shows campaign directions, not necessarily the exact final AI-generated email. A draft saved elsewhere is not automatically the body sent by the scheduler."
+        }
+      ]
+    },
+    {
+      "id": "scheduling",
+      "title": "Replies and meeting scheduling",
+      "lead": "The calendar policy and the recipient’s requested window constrain automatic booking. An unavailable requested window must not be replaced with a different day.",
+      "blocks": [
+        {
+          "type": "table",
+          "headers": [
+            "Reply or calendar condition",
+            "Expected behavior"
+          ],
+          "rows": [
+            [
+              "Requested window has a verified free slot",
+              "Book within that window and send a thread confirmation when automatic scheduling is enabled."
+            ],
+            [
+              "Requested window is checked and fully busy",
+              "Ask for two or three alternative days or times and a timezone. Do not substitute another day."
+            ],
+            [
+              "Requested date lies outside checked coverage",
+              "Hold for review rather than calling the unseen date unavailable."
+            ],
+            [
+              "Recognized general scheduling request with no window",
+              "May book the earliest eligible slot under the configured policy."
+            ],
+            [
+              "Incomplete, mismatched or ambiguous evidence",
+              "Hold for review."
+            ],
+            [
+              "Rejection or unsubscribe",
+              "Stop ordinary outreach follow-ups."
+            ]
+          ]
+        },
+        {
+          "type": "h",
+          "text": "Dates and policy"
+        },
+        {
+          "type": "p",
+          "text": "Relative dates are interpreted against the reply timestamp. Supported explicit timezones are respected; otherwise the meeting timezone is assumed. “Next week Wednesday” must not turn into the current Monday. The present integration checks a seven-day calendar range, so requests farther away can require manual handling."
+        },
+        {
+          "type": "p",
+          "text": "Ask the administrator to confirm meeting duration, working hours, timezone, minimum notice and automatic-scheduling status. Treat the effective worker policy as authoritative; static Settings labels may not reflect every deployed setting."
+        },
+        {
+          "type": "h",
+          "text": "What to review when a meeting is held"
+        },
+        {
+          "type": "steps",
+          "items": [
+            "Open the campaign and read the scheduling or review note.",
+            "Compare the original message with the intended date, timezone and requested window.",
+            "Check whether the date is inside calendar coverage and whether the calendar returned complete data.",
+            "Resolve the issue with the administrator before retrying. Do not repeatedly relaunch an email campaign to force a booking."
+          ]
+        },
+        {
+          "type": "p",
+          "text": "A successful scheduling unit test verifies logic under its test inputs. A connected-calendar test is still necessary to establish account permissions and actual booking behavior."
+        }
+      ]
+    },
+    {
+      "id": "crm",
+      "title": "Building the relationship CRM",
+      "lead": "Inbox collection saves conversation sources first. AI extraction then identifies contacts, fund information, deal facts and application updates.",
+      "blocks": [
+        {
+          "type": "steps",
+          "items": [
+            "Open CRM → Capture & settings. Confirm the configured inbox, choose 1 to 90 lookback days and Save settings.",
+            "Click Check inbox. Watch Import & sync activity; the inbox job and extraction jobs are separate.",
+            "Review Weekly, Contacts, Deals and VC funds against the saved source text.",
+            "Mark a contact’s Relationship as VC friend when you know that relationship. Enable daily inbox checks if wanted and save."
+          ]
+        },
+        {
+          "type": "table",
+          "headers": [
+            "CRM view",
+            "What it represents"
+          ],
+          "rows": [
+            [
+              "Weekly",
+              "Source activity grouped by weeks starting Monday at 00:00 UTC."
+            ],
+            [
+              "Contacts and VC friends",
+              "People keyed by email; VC friend is an explicit user classification."
+            ],
+            [
+              "Deals",
+              "Company and round, status, ARR, revenue, amount and next steps when evidenced."
+            ],
+            [
+              "Deals with VC friends",
+              "Deals linked to a contact explicitly marked as a VC friend."
+            ],
+            [
+              "VC funds",
+              "Named investment organizations and source-backed fund details."
+            ],
+            [
+              "Applications",
+              "Job applications and recruiter status updates, separate from investment deals."
+            ]
+          ]
+        },
+        {
+          "type": "h",
+          "text": "Logging a conversation"
+        },
+        {
+          "type": "p",
+          "text": "Use Tell the CRM what happened in Capture & settings. Enter a title, date, contact emails and note or transcript, then Extract CRM update. For example: “I spoke with Maya from North Fund about SampleCo’s seed round. Maya offered an introduction. SampleCo reported $400k ARR as of August; no investment was committed.” This is fictional example text."
+        },
+        {
+          "type": "p",
+          "text": "Weekly activity counts sent email, meetings and user-entered conversation notes. Received newsletters do not count as relationship activity. ARR and revenue remain separate fields. Missing facts stay unknown, and quoted evidence does not eliminate the need to review AI interpretation."
+        },
+        {
+          "type": "h",
+          "text": "Import boundaries"
+        },
+        {
+          "type": "p",
+          "text": "Drafts, spam and trash are excluded. Each scan is bounded to 25 threads, 100 messages and roughly 550 KB; long messages are excerpted to 16,000 characters. There is no advancing historical backfill cursor. At 2,000 displayed sources, Attio sync is blocked to avoid an incomplete export. General edit/delete controls and Outlook import are not available."
+        }
+      ]
+    },
+    {
+      "id": "attio",
+      "title": "Attio sync and meeting capture",
+      "lead": "Weekly sync exports data already collected in Signal Desk. It does not check the inbox or record meetings.",
+      "blocks": [
+        {
+          "type": "figure",
+          "name": "crm-flow",
+          "caption": "Collection, extraction and export are separate operations. Data remains available in Signal Desk between Attio syncs."
+        },
+        {
+          "type": "h",
+          "text": "Export to Attio"
+        },
+        {
+          "type": "steps",
+          "items": [
+            "The administrator configures the CRM token, object, fields and inbox binding. Check that the CRM banner says the destination is configured.",
+            "In Capture & settings, enable sync every seven days and save. Use Sync Attio now for an immediate export.",
+            "Inspect Import & sync activity and the Investment CRM destination in Attio. Records include contacts, funds, deals, weekly summaries and job applications."
+          ]
+        },
+        {
+          "type": "p",
+          "text": "Each export looks up its stable external ID and updates the matching record, or creates one if absent. Duplicate matches stop the export for review. Run only one worker for the workspace. Large crm_context exports contain a bounded summary; full sources and history remain in Signal Desk; application status uses the existing deal_status field. VC friends and deals are related views of shared data, not separate private accounts. Attio views may require administrator setup."
+        },
+        {
+          "type": "h",
+          "text": "Import meeting transcripts"
+        },
+        {
+          "type": "p",
+          "text": "Enable Attio’s recorder for the intended calendar and confirm the account supports the necessary recording and workflow features. In Signal Desk, generate a delivery token under Attio meeting recorder. In Attio, configure Call recording created → Send HTTP request to POST to the endpoint displayed in that panel."
+        },
+        {
+          "type": "p",
+          "text": "Map a stable recording ID, title, ISO start date, verified participant emails, transcript text and recording URL. Use the token in the Authorization header. Test one completed recording and confirm both delivery and extraction before enabling automatic imports. Enabling the recorder alone does not establish delivery."
+        },
+        {
+          "type": "p",
+          "text": "Historical recordings need explicit import or replay. Use manual transcript paste as a fallback. Rotating the delivery token invalidates older tokens. The legacy Granola delivery endpoint is disabled. The Attio endpoint accepts a mapped JSON request, not a raw Attio webhook. If your workflow cannot provide transcript text, use an adapter or paste notes manually."
+        }
+      ]
+    },
+    {
+      "id": "applications",
+      "title": "Tracking VC job applications",
+      "lead": "The Applications view reads confirmations and recruiter replies from the configured inbox. It can include Tsenta-generated confirmations without connecting a Tsenta account.",
+      "blocks": [
+        {
+          "type": "steps",
+          "items": [
+            "Save CRM inbox settings with a lookback covering the application confirmation. Click Check inbox.",
+            "Open CRM → Applications after extraction. Expand a record to inspect contacts, dates, source text and status history.",
+            "Enable daily inbox checks to collect later recruiter replies automatically. For applications without emails, enter a factual application note in Capture & settings.",
+            "Run Sync Attio now or wait for the configured weekly export to see job_application records in Attio."
+          ]
+        },
+        {
+          "type": "table",
+          "headers": [
+            "Field or state",
+            "Meaning"
+          ],
+          "rows": [
+            [
+              "Firm and role",
+              "Both must be explicit enough to identify the application."
+            ],
+            [
+              "Application details",
+              "Reference, posting link, date applied, deadline and next step when stated."
+            ],
+            [
+              "Applied",
+              "Explicit application submission evidence; outreach alone does not establish this."
+            ],
+            [
+              "Interview or Offer",
+              "Evidence of a job interview invitation or employment offer."
+            ],
+            [
+              "Rejected or Withdrawn",
+              "Explicit rejection or withdrawal evidence."
+            ]
+          ]
+        },
+        {
+          "type": "h",
+          "text": "What Tsenta does and does not mean here"
+        },
+        {
+          "type": "p",
+          "text": "This feature does not log into Tsenta, submit application forms, tailor resumes or synchronize Tsenta’s own tracker. It searches mail for tracked company names, domains and outreach contacts. A recruiter or Tsenta message from a different domain can be imported when it mentions a tracked company. Add the company first or log an application note with its firm and role. Messages without a scope match or identifiable firm and role will not appear. Applied requires explicit confirmation wording in the quoted evidence; uncertain status remains unknown. The tracker can include non-VC roles too; a VC-only classifier is not implemented."
+        },
+        {
+          "type": "h",
+          "text": "Identity and status limitations"
+        },
+        {
+          "type": "p",
+          "text": "Records group by normalized firm and role, with explicit references used to distinguish applications. Missing references or varying role names can split records or make matching ambiguous. Later timestamped evidence updates the projected status; this is not a manually approved status workflow. Inspect source history when evidence conflicts."
+        },
+        {
+          "type": "h",
+          "text": "A safe functional test"
+        },
+        {
+          "type": "p",
+          "text": "Add a note for a fictional firm and role with status Applied. Add a later note using exactly the same firm and role with status Interview. The Applications view should show the updated status and both sources. Test records persist and will export if sync runs; coordinate cleanup with the administrator. Tracking does not send follow-up emails."
+        }
+      ]
+    },
+    {
+      "id": "operations",
+      "title": "Schedules safeguards and acceptance",
+      "lead": "Review evidence before acting, and verify each integration using a small operation that exercises the actual connected account.",
+      "blocks": [
+        {
+          "type": "table",
+          "headers": [
+            "Automation",
+            "Trigger or cadence"
+          ],
+          "rows": [
+            [
+              "Signals",
+              "Manual scan or selected interval after initial successful or partial run."
+            ],
+            [
+              "Inbox CRM",
+              "Manual Check inbox or daily when enabled."
+            ],
+            [
+              "Attio CRM",
+              "Manual Sync Attio now or every seven days when enabled."
+            ],
+            [
+              "Outreach",
+              "Approved campaign and its configured follow-up policy."
+            ],
+            [
+              "Meeting import",
+              "A completed recording delivered through the configured Attio workflow."
+            ]
+          ]
+        },
+        {
+          "type": "h",
+          "text": "Acceptance checklist"
+        },
+        {
+          "type": "bullets",
+          "items": [
+            "Research: a scan finishes and at least one displayed quotation matches its linked source, or an understandable no-result report appears.",
+            "Inbox: an expected conversation is imported with the correct participants and source text. Extraction finishes separately.",
+            "Applications: an Applied note and later Interview note project to the expected history. A real confirmation email is then checked.",
+            "Attio: the expected records appear in the configured destination; a second sync updates rather than duplicates stable records.",
+            "Outreach: sender, recipient routing, resume policy and one explicitly authorized controlled delivery are verified before relying on real sending.",
+            "Calendar: one requested window is tested, plus an unavailable window that asks for alternatives or a coverage exception that holds for review."
+          ]
+        },
+        {
+          "type": "h",
+          "text": "Current safeguards"
+        },
+        {
+          "type": "p",
+          "text": "The app uses an access-code session, owner-scoped data and origin checks for browser mutations. Credentials are encrypted for the worker. Research tools are restricted to read-only investigation. Launch requires recipient review; guessed addresses can require an extra first-email approval. CRM imports do not automatically enroll contacts in outreach."
+        },
+        {
+          "type": "h",
+          "text": "Weekly operating routine"
+        },
+        {
+          "type": "p",
+          "text": "First check connection status and failed or partial jobs. Then review new signals, CRM activity, VC friendships and application changes. Check expected meeting imports and the last Attio export. Finally inspect active campaigns and any scheduling exceptions."
+        },
+        {
+          "type": "p",
+          "text": "No live account readiness is implied by this guide. Track real outcomes such as usable signals, reviewed contacts, completed imports, reply rates and sync failures before drawing conclusions about product performance. No performance targets or achieved metrics are asserted here."
+        }
+      ]
+    },
+    {
+      "id": "troubleshooting",
+      "title": "Troubleshooting and product boundaries",
+      "lead": "Use the activity report for the affected workflow. A connection badge is a starting point, not proof that all provider operations work.",
+      "blocks": [
+        {
+          "type": "table",
+          "headers": [
+            "Symptom",
+            "Next action"
+          ],
+          "rows": [
+            [
+              "Research authentication or usage failure",
+              "Check the Claude API key, provider usage and Slashy tool access in Settings."
+            ],
+            [
+              "Zero signals or partial scan",
+              "Read Collection activity, source failures and rejected evidence. Refine criteria before retrying."
+            ],
+            [
+              "Crustdata failure",
+              "Check key access and credits. Web research can continue; inspect the discovery status."
+            ],
+            [
+              "CRM jobs queued",
+              "Check worker and the credentials required by that job type."
+            ],
+            [
+              "Expected application missing",
+              "Check lookback, partial coverage, extraction completion and explicit firm/role evidence."
+            ],
+            [
+              "Attio destination setup needed",
+              "Ask the administrator to check the dedicated token, object and inbox binding."
+            ],
+            [
+              "Meeting absent",
+              "Check recording completion, enabled workflow, delivery response and mapped fields."
+            ],
+            [
+              "Sending disabled or held",
+              "Inspect safe mode, campaign pause, first-email approval and uncertainty notes."
+            ],
+            [
+              "Meeting held for review",
+              "Check requested date, timezone, calendar coverage and source completeness."
+            ]
+          ]
+        },
+        {
+          "type": "h",
+          "text": "Available and unfinished"
+        },
+        {
+          "type": "p",
+          "text": "The current implementation includes discovery, reviewed outreach, inbox CRM, Attio export and application tracking. It still requires account-specific onboarding. Automatic Attio transcript delivery requires provider-side setup. Crustdata adds discovery candidates, but continuous change monitoring is not implemented."
+        },
+        {
+          "type": "p",
+          "text": "Not implemented: independent customer accounts, self-service Attio account linking, Airtable mirroring, a complete mailbox backfill, a general CRM edit/delete interface, direct Tsenta account sync and Tsenta application submission. These are product boundaries, not promised release dates."
+        },
+        {
+          "type": "h",
+          "text": "Getting support"
+        },
+        {
+          "type": "p",
+          "text": "Share the tab, action, timestamp, job status and displayed error. Include the relevant source identifier when possible. Do not include secrets or unnecessary private conversation text. If email delivery is uncertain, check the sent thread and campaign state before retrying."
+        },
+        {
+          "type": "h",
+          "text": "Reference"
+        },
+        {
+          "type": "p",
+          "text": "The maintained implementation is the basis for this handbook: UI workflow components, signal collector, CRM extraction and projection, inbox importer and Attio exporter. Provider-side setup details can change; consult the provider’s current account documentation when connecting it."
+        }
+      ]
+    }
+  ]
+}
