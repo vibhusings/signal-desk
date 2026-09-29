@@ -1,8 +1,8 @@
 # Google Cloud runner
 
-The hosted Signal Desk UI talks to one trusted background runner. The current
-Google Cloud VM is prepared at `/home/vibhusingh/gtm-workflow` and uses the
-`signal-desk-runner.service` systemd unit.
+The hosted Signal Desk UI talks to one trusted background runner, installed as the
+`signal-desk-runner.service` systemd unit. This page covers moving an existing runner to a
+Google Cloud VM; for a new install follow [SETUP.md](../SETUP.md).
 
 ## Safety state during migration
 
@@ -19,7 +19,7 @@ Google Cloud VM is prepared at `/home/vibhusingh/gtm-workflow` and uses the
 Run on the VM:
 
 ```bash
-cd /home/vibhusingh/gtm-workflow
+cd ~/signal-desk
 npm test
 npm run build
 claude mcp list

@@ -17,7 +17,7 @@ Subscription limits or an expired login stop jobs; there is no API fallback.
 Switch back to Anthropic API key when personal testing is complete.
 
 Signing in on your Mac does not sign in the cloud worker. The cloud service uses
-`/home/vibhusingh` as its home. Run the login there as `vibhusingh`, not root.
+its service user's home directory. Run the login there as that user, not root.
 The worker checks login status approximately every 30 seconds when idle.
 
 The switch does not change the sender, recipients, campaign approvals, calendar,
