@@ -1,0 +1,55 @@
+{
+  "version": "7",
+  "dialect": "sqlite",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "6",
+      "when": 1789433031174,
+      "tag": "0000_illegal_secret_warriors",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "6",
+      "when": 1789501058828,
+      "tag": "0001_furry_skullbuster",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "6",
+      "when": 1789523070920,
+      "tag": "0002_brief_miracleman",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "6",
+      "when": 1789523149269,
+      "tag": "0003_charming_roland_deschain",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "6",
+      "when": 1789679991054,
+      "tag": "0004_tiresome_fenris",
+      "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "6",
+      "when": 1789715338954,
+      "tag": "0005_strange_slayback",
+      "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "6",
+      "when": 1789849285023,
+      "tag": "0006_superb_zarek",
+      "breakpoints": true
+    }
+  ]
+}
