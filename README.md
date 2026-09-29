@@ -1,9 +1,18 @@
-# gtm-workflow
+# Signal Desk
 
-Using the hosted app? Start with the [Signal Desk setup and user guide](docs/signal-desk-user-guide.md),
-including the new-user checklist, every workspace tab, Signals, outreach, meetings,
-inbox CRM, Granola, Attio, and troubleshooting. The terminal instructions below
-describe the underlying workflow; new pilot users do not need to install it locally.
+Signal-driven investment outreach. Signal Desk finds startups with fresh evidence (funding,
+launches, hiring), researches their founders, drafts a first email for you to approve, sends
+it with automated follow-ups, books a Google Meet when someone replies with a time, and keeps
+a CRM in sync with Attio.
+
+- **Set up your own copy:** [SETUP.md](SETUP.md), from zero to a first safe test.
+- **Using it day to day:** [docs/signal-desk-user-guide.md](docs/signal-desk-user-guide.md).
+- **Layout:** the runner (research, sending, replies, meetings, CRM) is at the repo root;
+  the website is in [`ui/`](ui/README.md).
+
+The rest of this page describes the runner's core design and its command-line tools.
+
+## The outreach scheduler
 
 Deterministic outreach scheduler. **Attio is the state machine; the LLM only writes copy.**
 

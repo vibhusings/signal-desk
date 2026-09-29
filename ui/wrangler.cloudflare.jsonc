@@ -1,4 +1,6 @@
 {
+  // Your own install: change "name" (becomes <name>.<account>.workers.dev) and put the
+  // database_name/database_id printed by `npx wrangler d1 create`. See SETUP.md step 3.
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "signal-desk-gtm",
   "workers_dev": true,
