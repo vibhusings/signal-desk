@@ -1,0 +1,27 @@
+[Unit]
+Description=Signal Desk cloud runner
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=vibhusingh
+Group=vibhusingh
+WorkingDirectory=/home/vibhusingh/gtm-workflow
+EnvironmentFile=/etc/signal-desk/runner.env
+Environment=HOME=/home/vibhusingh
+Environment=PATH=/usr/local/bin:/usr/bin:/bin:/home/vibhusingh/.local/bin
+ExecStart=/usr/bin/node --import tsx src/bridge/runner.ts
+Restart=always
+RestartSec=10
+TimeoutStopSec=30
+KillSignal=SIGTERM
+UMask=0077
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=full
+ProtectHome=read-only
+ReadWritePaths=/home/vibhusingh/gtm-workflow/.runtime /home/vibhusingh/.claude
+
+[Install]
+WantedBy=multi-user.target
