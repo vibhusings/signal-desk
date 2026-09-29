@@ -210,7 +210,24 @@ The Launch outreach page shows "Cloud runner connected" once the runner has chec
 With test delivery on, approve only one contact per company, because every test email goes
 to the same inbox. When you are ready for real outreach, turn Test delivery off.
 
-## Updating
+## Two workspaces on one machine
+
+One VM can host runners for several sites (for example, one per person). Give each its own
+clone, its own `.runtime/bridge-config.json` from that site's step 4, and its own service:
+
+```bash
+git clone https://github.com/vibhusings/signal-desk.git ~/signal-desk-2
+cd ~/signal-desk-2 && npm ci
+# copy the second site's bridge-config.json into ~/signal-desk-2/.runtime/, then:
+cp config/.env.example runner-2.env && nano runner-2.env
+SIGNAL_DESK_SERVICE=signal-desk-runner-2 bash scripts/install-systemd.sh runner-2.env
+sudo systemctl enable --now signal-desk-runner-2.service
+```
+
+Each runner keeps its state in its own `.runtime/`, so they never share jobs. They do share the
+service user's Claude Code login: a workspace that should use its own Anthropic API key must
+keep `RUNNER_PERSONAL_TESTING=0`, so it can never fall back to that login.
+
 
 ```bash
 # runner VM

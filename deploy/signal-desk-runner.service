@@ -1,4 +1,4 @@
-# Template: scripts/install-systemd.sh fills in __USER__, __GROUP__, __HOME__, __REPO__ and __NODE__.
+# Template: scripts/install-systemd.sh fills in __USER__, __GROUP__, __HOME__, __REPO__, __NODE__ and __ENV_FILE__.
 [Unit]
 Description=Signal Desk cloud runner
 After=network-online.target
@@ -9,7 +9,7 @@ Type=simple
 User=__USER__
 Group=__GROUP__
 WorkingDirectory=__REPO__
-EnvironmentFile=/etc/signal-desk/runner.env
+EnvironmentFile=__ENV_FILE__
 Environment=HOME=__HOME__
 Environment=PATH=/usr/local/bin:/usr/bin:/bin:__HOME__/.local/bin
 ExecStart=__NODE__ --import tsx src/bridge/runner.ts
