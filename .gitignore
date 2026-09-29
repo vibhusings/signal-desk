@@ -1,0 +1,23 @@
+node_modules/
+dist/
+.env
+.env.*
+!.env.example
+*.log
+.spike/
+
+.runtime/
+
+
+# Credentials and local tool state
+*.pem
+.dev.vars*
+.wrangler/
+.DS_Store
+
+# Build/deploy archives are regenerated, and may bundle anything
+*.zip
+
+# Internal handoff notes and generated handbooks (contain personal details)
+HANDOFF.md
+output/

@@ -1,0 +1,36 @@
+{
+  "name": "gtm-workflow",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Deterministic GTM outreach scheduler. Attio is the state machine; the LLM only writes copy.",
+  "scripts": {
+    "build": "tsc",
+    "run:scheduler": "tsx src/main.ts",
+    "seed:test": "tsx scripts/seed-test.ts",
+    "spike": "bash scripts/phase0-spike.sh",
+    "test": "tsx scripts/test-scheduler.ts && tsx scripts/test-sourcing.ts && tsx scripts/test-send-evidence.ts && tsx scripts/test-apply.ts && tsx scripts/test-replies.ts && tsx scripts/test-tools.ts && tsx scripts/test-bridge.ts && tsx scripts/test-signals.ts && tsx scripts/test-byok.ts && tsx scripts/test-guardrails.ts && tsx scripts/test-slashy-envelope.ts && tsx scripts/test-resume-upload.ts && tsx scripts/test-mcp-config.ts && tsx scripts/test-slashy-proxy.ts && tsx scripts/test-crm.ts && tsx scripts/test-vc-intro.ts && tsx scripts/test-referral-send.ts && tsx scripts/test-approved-outreach.ts",
+    "demo": "tsx src/main.ts --demo",
+    "ingest": "tsx scripts/ingest-deck.ts",
+    "setup:attio": "tsx scripts/setup-attio-attributes.ts",
+    "apply": "tsx scripts/apply.ts",
+    "prepare:test": "tsx scripts/prepare-scraped-test.ts",
+    "show:record": "tsx scripts/show-attio-record.ts",
+    "verify:test": "tsx scripts/verify-test-delivery.ts",
+    "arm:reply-test": "tsx scripts/arm-reply-test.ts",
+    "upload:resume": "tsx scripts/upload-resume.ts",
+    "check:replies": "tsx scripts/check-replies.ts",
+    "run:bridge": "tsx src/bridge/runner.ts",
+    "test:crm": "node --import tsx scripts/test-crm.ts",
+    "test:crustdata": "node --import tsx scripts/test-crustdata.ts"
+  },
+  "dependencies": {
+    "dotenv": "^16.4.5",
+    "zod": "^3.25.76"
+  },
+  "devDependencies": {
+    "@types/node": "^22.7.4",
+    "tsx": "^4.19.1",
+    "typescript": "^5.6.2"
+  }
+}

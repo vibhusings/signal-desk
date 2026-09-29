@@ -1,0 +1,21 @@
+{
+  "_comment": "One entry per touch. `angle` steers the copy; the LLM never decides who or when.",
+  "touches": [
+    {
+      "n": 1,
+      "angle": "First contact. Reference something specific about what the company is building. State the reason for reaching out in one sentence. Ask for a 15-minute call. No pitch deck language, no superlatives."
+    },
+    {
+      "n": 2,
+      "angle": "Short nudge on the first email. Add exactly one new piece of substance they did not have before. Under 60 words."
+    },
+    {
+      "n": 3,
+      "angle": "Different angle from touches 1 and 2. Lead with a concrete observation about their market or stage. Still ask for 15 minutes."
+    },
+    {
+      "n": 4,
+      "angle": "Final message. Say plainly this is the last one, leave the door open, and do not ask a question that requires a reply."
+    }
+  ]
+}

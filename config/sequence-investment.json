@@ -1,0 +1,8 @@
+{
+ "touches": [
+  {"n":1,"angle":"Investment introduction to a founder. Reference the supplied source-backed signal and explain why it relates to the sender's stated research thesis. Say you are interested in learning more about the business and exploring a potential investment conversation. Ask whether they are open to a short call. Never imply a committed investment, claim fund affiliation, or invent credentials, check sizes, portfolio companies or traction. Do not mention job applications or attach a resume. Under 120 words."},
+  {"n":2,"angle":"Brief follow-up to the investment introduction. Revisit one supported detail without claiming new developments or inventing value to offer. Ask if a conversation would be useful. Under 60 words."},
+  {"n":3,"angle":"Brief investment follow-up. Ask one thoughtful question grounded in the supplied company context. Do not invent market facts or fundraising plans. Under 70 words."},
+  {"n":4,"angle":"Close the investment outreach politely. Say this is the last follow-up, leave the door open and do not pressure the founder. Under 50 words."}
+ ]
+}

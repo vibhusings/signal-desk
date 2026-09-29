@@ -1,0 +1,21 @@
+{
+  "_comment": "Job-application variant of config/sequence.json. Select with SEQUENCE_FILE. Same rule as the investor sequence: `angle` steers the copy, the LLM never decides who or when.",
+  "touches": [
+    {
+      "n": 1,
+      "angle": "First contact about a role. Open with one specific, concrete thing about what the company is building — not flattery, not 'I'm passionate about your mission'. State plainly that you're interested in working there and what you'd contribute. Mention the resume is attached. Keep it under 120 words. No buzzwords, no listing adjectives about yourself."
+    },
+    {
+      "n": 2,
+      "angle": "Short nudge on the first email. Add exactly one concrete piece of evidence you did not give before — something you built, shipped, or measured that is relevant to their problem. Under 60 words. Do not repeat the first email's framing."
+    },
+    {
+      "n": 3,
+      "angle": "Different angle entirely. Lead with an observation about their product, market, or a recent change you noticed, and connect it to specific work you could do. Ask directly whether it's worth a short conversation."
+    },
+    {
+      "n": 4,
+      "angle": "Final message. Say plainly this is the last one and that you'll leave it there. Keep the door open without asking a question that requires a reply. Two or three sentences at most, no new pitch."
+    }
+  ]
+}
